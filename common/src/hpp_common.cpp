@@ -1,6 +1,6 @@
 // ROS message includes
 #include "ros/ros.h"
-#include <sensor_msgs/JointState.h>
+#include <trajectory_msgs/JointTrajectory.h>
 #include <sensor_msgs/JointState.h>
 #include <sensor_msgs/JointState.h>
 #include <std_srvs/Empty.h>
@@ -25,7 +25,7 @@ public:
     sensor_msgs::JointState in_initConfig;
     sensor_msgs::JointState in_goalConfig;
     //output data
-    sensor_msgs::JointState out_path;
+    trajectory_msgs::JointTrajectory out_path;
     bool out_path_active;
 };
 

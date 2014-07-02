@@ -4,7 +4,7 @@
 #include <hpp_node/hppConfig.h>
 
 // ROS message includes
-#include <sensor_msgs/JointState.h>
+#include <trajectory_msgs/JointTrajectory.h>
 #include <sensor_msgs/JointState.h>
 #include <sensor_msgs/JointState.h>
 #include <std_srvs/Empty.h>
@@ -50,7 +50,7 @@ class hpp_ros
         n_.param("loadObstacle_remap", loadObstacle_remap, (std::string)"loadObstacle");
         loadObstacle_ = n_.advertiseService<std_srvs::Empty::Request , std_srvs::Empty::Response>(loadObstacle_remap, boost::bind(&hpp_impl::callback_loadObstacle, &component_implementation_,_1,_2,component_config_));
 
-        path_ = n_.advertise<sensor_msgs::JointState>("path", 1);
+        path_ = n_.advertise<trajectory_msgs::JointTrajectory>("path", 1);
         initConfig_ = n_.subscribe("initConfig", 1, &hpp_ros::topicCallback_initConfig, this);
         goalConfig_ = n_.subscribe("goalConfig", 1, &hpp_ros::topicCallback_goalConfig, this);
 

@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
 	std_srvs
 	sensor_msgs
 	geometry_msgs
+	trajectory_msgs
 )
 
 # protected region additional user defined REQUIREMENTS on begin #
@@ -43,6 +44,7 @@ catkin_package(
 	std_srvs
 	sensor_msgs
 	geometry_msgs
+	trajectory_msgs
    
 )
 

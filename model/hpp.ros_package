@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ros:Package xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ros="http://ros/1.0" name="hpp_node" author="Florent Lamiraux" author_email="florent@laas.fr" description="The hpp_node package" license="lgpl  v2" url="">
   <node name="hpp">
-    <publisher name="path" msg="sensor_msgs::JointState"/>
+    <publisher name="path" msg="trajectory_msgs::JointTrajectory"/>
     <subscriber name="initConfig" msg="sensor_msgs::JointState"/>
     <subscriber name="goalConfig" msg="sensor_msgs::JointState"/>
     <serviceServer name="loadRobotModel" msg="std_srvs::Empty"/>
@@ -14,4 +14,5 @@
   <depend>std_srvs</depend>
   <depend>sensor_msgs</depend>
   <depend>geometry_msgs</depend>
+  <depend>trajectory_msgs</depend>
 </ros:Package>

@@ -20,7 +20,7 @@ Node: hpp
 
 
 #### Published Topics
-**path** *(sensor_msgs::JointState)*   
+**path** *(trajectory_msgs::JointTrajectory)*   
 <!--- protected region path on begin -->
 <!--- protected region path end -->
 

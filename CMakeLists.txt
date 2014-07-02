@@ -14,6 +14,13 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 # protected region additional user defined REQUIREMENTS on begin #
+include (cmake/base.cmake)
+set (CXX_DISABLE_WERROR True)
+set (PROJECT_DESCRIPTION Implementation of a ROS node integrating hpp-core library)
+set (PROJECT_URL https://github.com/humanoid-path-planner/hpp-bride)
+setup_project ()
+add_required_dependency ("hpp-core >= 3")
+add_required_dependency ("hpp-model-urdf >= 3")
 # protected region additional user defined REQUIREMENTS end #
 
 generate_dynamic_reconfigure_options(cfg/hpp.cfg )
@@ -64,6 +71,8 @@ target_link_libraries(hpp
 )
 
 # protected region additional user defined BUILD STATEMENTS on begin #
+pkg_config_use_dependency (hpp hpp-core)
+pkg_config_use_dependency (hpp hpp-model-urdf)
 # protected region additional user defined BUILD STATEMENTS end #
 
 
@@ -79,4 +88,5 @@ install(TARGETS hpp
 )
 
 # protected region user Cmake macros on begin #
+setup_project_finalize ()
 # protected region user Cmake macros end #

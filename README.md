@@ -1,11 +1,11 @@
-hpp
+hpp_node
 ====================
 
 General description
 ---------------------
-The hpp package
+The hpp_node package
 
-<img src="./model/hpp.png" width="300px" />
+<img src="./model/hpp_node.png" width="300px" />
 
 Node: hpp
 ---------------------
@@ -26,13 +26,13 @@ Node: hpp
 
 
 #### Subscribed Topics
-**init_config** *(sensor_msgs::JointState)*   
-<!--- protected region init_config on begin -->
-<!--- protected region init_config end -->
+**initConfig** *(sensor_msgs::JointState)*   
+<!--- protected region initConfig on begin -->
+<!--- protected region initConfig end -->
 
-**goal_config** *(sensor_msgs::JointState)*   
-<!--- protected region goal_config on begin -->
-<!--- protected region goal_config end -->
+**goalConfig** *(sensor_msgs::JointState)*   
+<!--- protected region goalConfig on begin -->
+<!--- protected region goalConfig end -->
 
 
 

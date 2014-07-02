@@ -1,7 +1,7 @@
 // ROS includes
 #include <ros/ros.h>
 #include <dynamic_reconfigure/server.h>
-#include <hpp/hppConfig.h>
+#include <hpp_node/hppConfig.h>
 
 // ROS message includes
 #include <sensor_msgs/JointState.h>
@@ -21,15 +21,15 @@ class hpp_ros
     ros::NodeHandle n_;
     ros::NodeHandle np_;
 
-    dynamic_reconfigure::Server<hpp::hppConfig> server;
-    dynamic_reconfigure::Server<hpp::hppConfig>::CallbackType f;
+    dynamic_reconfigure::Server<hpp_node::hppConfig> server;
+    dynamic_reconfigure::Server<hpp_node::hppConfig>::CallbackType f;
 
     ros::Publisher path_;
-    ros::Subscriber init_config_;
-    ros::Subscriber goal_config_;
+    ros::Subscriber initConfig_;
+    ros::Subscriber goalConfig_;
     ros::ServiceServer loadRobotModel_;
     ros::ServiceServer solve_;
-    ros::ServiceServer loadObstacles_;
+    ros::ServiceServer loadObstacle_;
 
     hpp_data component_data_;
     hpp_config component_config_;
@@ -46,13 +46,13 @@ class hpp_ros
         std::string solve_remap;
         n_.param("solve_remap", solve_remap, (std::string)"solve");
         solve_ = n_.advertiseService<std_srvs::Empty::Request , std_srvs::Empty::Response>(solve_remap, boost::bind(&hpp_impl::callback_solve, &component_implementation_,_1,_2,component_config_));
-        std::string loadObstacles_remap;
-        n_.param("loadObstacles_remap", loadObstacles_remap, (std::string)"loadObstacles");
-        loadObstacles_ = n_.advertiseService<std_srvs::Empty::Request , std_srvs::Empty::Response>(loadObstacles_remap, boost::bind(&hpp_impl::callback_loadObstacles, &component_implementation_,_1,_2,component_config_));
+        std::string loadObstacle_remap;
+        n_.param("loadObstacle_remap", loadObstacle_remap, (std::string)"loadObstacle");
+        loadObstacle_ = n_.advertiseService<std_srvs::Empty::Request , std_srvs::Empty::Response>(loadObstacle_remap, boost::bind(&hpp_impl::callback_loadObstacle, &component_implementation_,_1,_2,component_config_));
 
         path_ = n_.advertise<sensor_msgs::JointState>("path", 1);
-        init_config_ = n_.subscribe("init_config", 1, &hpp_ros::topicCallback_init_config, this);
-        goal_config_ = n_.subscribe("goal_config", 1, &hpp_ros::topicCallback_goal_config, this);
+        initConfig_ = n_.subscribe("initConfig", 1, &hpp_ros::topicCallback_initConfig, this);
+        goalConfig_ = n_.subscribe("goalConfig", 1, &hpp_ros::topicCallback_goalConfig, this);
 
         np_.param("urdfDescription", component_config_.urdfDescription, (std::string)"");
         np_.param("srdfDescription", component_config_.srdfDescription, (std::string)"");
@@ -60,16 +60,16 @@ class hpp_ros
 
 
     }
-    void topicCallback_init_config(const sensor_msgs::JointState::ConstPtr& msg)
+    void topicCallback_initConfig(const sensor_msgs::JointState::ConstPtr& msg)
     {
-        component_data_.in_init_config = *msg;
+        component_data_.in_initConfig = *msg;
     }
-    void topicCallback_goal_config(const sensor_msgs::JointState::ConstPtr& msg)
+    void topicCallback_goalConfig(const sensor_msgs::JointState::ConstPtr& msg)
     {
-        component_data_.in_goal_config = *msg;
+        component_data_.in_goalConfig = *msg;
     }
 
-    void configure_callback(hpp::hppConfig &config, uint32_t level)
+    void configure_callback(hpp_node::hppConfig &config, uint32_t level)
     {
         component_config_.urdfDescription = config.urdfDescription;
         component_config_.srdfDescription = config.srdfDescription;

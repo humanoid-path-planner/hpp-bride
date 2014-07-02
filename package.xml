@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <package>
-  <name>hpp</name>
-  <description>The hpp package</description>
+  <name>hpp_node</name>
+  <description>The hpp_node package</description>
   <version>0.1.0</version>
   <maintainer email="florent@laas.fr">Florent Lamiraux</maintainer>
   <author email="florent@laas.fr">Florent Lamiraux</author>
-  <license>lgpl v2</license>
+  <license>lgpl  v2</license>
   <url></url>
 
   <buildtool_depend>catkin</buildtool_depend>

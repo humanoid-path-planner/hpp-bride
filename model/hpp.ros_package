@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ros:Package xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ros="http://ros/1.0" name="hpp" author="Florent Lamiraux" author_email="florent@laas.fr" description="The hpp package" license="lgpl v2">
+<ros:Package xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ros="http://ros/1.0" name="hpp_node" author="Florent Lamiraux" author_email="florent@laas.fr" description="The hpp_node package" license="lgpl  v2" url="">
   <node name="hpp">
     <publisher name="path" msg="sensor_msgs::JointState"/>
-    <subscriber name="init_config" msg="sensor_msgs::JointState"/>
-    <subscriber name="goal_config" msg="sensor_msgs::JointState"/>
+    <subscriber name="initConfig" msg="sensor_msgs::JointState"/>
+    <subscriber name="goalConfig" msg="sensor_msgs::JointState"/>
     <serviceServer name="loadRobotModel" msg="std_srvs::Empty"/>
     <serviceServer name="solve" msg="std_srvs::Empty"/>
-    <serviceServer name="loadObstacles" msg="std_srvs::Empty"/>
-    <parameter name="urdfDescription" type="string"/>
+    <serviceServer name="loadObstacle" msg="std_srvs::Empty"/>
+    <parameter name="urdfDescription" type="string" value=""/>
     <parameter name="srdfDescription" type="string"/>
   </node>
   <depend>std_msgs</depend>

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(hpp)
+project(hpp_node)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -63,7 +63,7 @@ add_executable(hpp ros/src/hpp_ros.cpp)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 add_dependencies(hpp hpp_gencfg)
-add_dependencies(hpp ${hpp_EXPORTED_TARGETS})
+add_dependencies(hpp ${hpp_node_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(hpp

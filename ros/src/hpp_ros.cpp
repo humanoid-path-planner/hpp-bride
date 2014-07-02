@@ -54,8 +54,8 @@ class hpp_ros
         initConfig_ = n_.subscribe("initConfig", 1, &hpp_ros::topicCallback_initConfig, this);
         goalConfig_ = n_.subscribe("goalConfig", 1, &hpp_ros::topicCallback_goalConfig, this);
 
-        np_.param("urdfDescription", component_config_.urdfDescription, (std::string)"");
-        np_.param("srdfDescription", component_config_.srdfDescription, (std::string)"");
+        np_.param("urdfDescription", component_config_.urdfDescription, (std::string)"robot_description");
+        np_.param("srdfDescription", component_config_.srdfDescription, (std::string)"robot_srdf");
 
 
 

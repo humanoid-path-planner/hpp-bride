@@ -10,11 +10,11 @@ The hpp_node package
 Node: hpp
 ---------------------
 #### Parameters
-**urdfDescription** *(string, default: )*
+**urdfDescription** *(string, default: robot_description)*
 <!--- protected region urdfDescription on begin -->
 <!--- protected region urdfDescription end -->
 
-**srdfDescription** *(string, default: )*
+**srdfDescription** *(string, default: robot_srdf)*
 <!--- protected region srdfDescription on begin -->
 <!--- protected region srdfDescription end -->
 

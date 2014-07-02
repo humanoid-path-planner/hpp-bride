@@ -20,7 +20,7 @@ set (CXX_DISABLE_WERROR True)
 set (PROJECT_DESCRIPTION Implementation of a ROS node integrating hpp-core library)
 set (PROJECT_URL https://github.com/humanoid-path-planner/hpp-bride)
 setup_project ()
-add_required_dependency ("hpp-core >= 3")
+add_required_dependency ("hpp_ros")
 add_required_dependency ("hpp-model-urdf >= 3")
 # protected region additional user defined REQUIREMENTS end #
 

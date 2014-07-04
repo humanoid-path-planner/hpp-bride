@@ -11,15 +11,19 @@
 #include <ros/console.h>
 #include <hpp/model/device.hh>
 #include <hpp/core/problem-solver.hh>
+#include <hpp/core/path-vector.hh>
 #include <hpp/model/urdf/util.hh>
 #include <hpp/ros/joint-state.hh>
+#include <hpp/ros/joint-trajectory.hh>
 
-using hpp::core::ProblemSolver;
-using hpp::core::ProblemSolverPtr_t;
 using hpp::model::Device;
 using hpp::model::DevicePtr_t;
-using hpp::core::ConfigurationPtr_t;
 using hpp::model::Configuration_t;
+using hpp::core::ConfigurationPtr_t;
+using hpp::core::PathVectorPtr_t;
+using hpp::core::PathVectors_t;
+using hpp::core::ProblemSolver;
+using hpp::core::ProblemSolverPtr_t;
 
 /* protected region user include files end */
 
@@ -51,6 +55,7 @@ private:
   ros::Time lastUpdateGoalConfig_;
   ConfigurationPtr_t initConfig_;
   ConfigurationPtr_t goalConfig_;
+  bool needToExportPath_;
   /* protected region user member variables end */
 
 public:
@@ -62,6 +67,7 @@ public:
     lastUpdateInitConfig_.nsec = 0;
     lastUpdateGoalConfig_.sec = 0;
     lastUpdateGoalConfig_.nsec = 0;
+    needToExportPath_ = false;
      /* protected region user constructor end */
   }
 
@@ -74,6 +80,7 @@ public:
   void update(hpp_data &data, hpp_config)
   {
     /* protected region user update on begin */
+    data.out_path_active = false;
     /// Update initial and goal configurations if needed
     DevicePtr_t robot = problemSolver_->robot ();
     if (robot) {
@@ -83,6 +90,17 @@ public:
       if (data.in_goalConfig.header.stamp != lastUpdateGoalConfig_) {
         hpp::ros::jointStateToConfig (robot, data.in_goalConfig, *goalConfig_);
       }
+    }
+    // Export path if Service solve has been called with success
+    if (needToExportPath_) {
+      // Get latest computed path
+      const PathVectors_t& paths = problemSolver_->paths ();
+      PathVectorPtr_t path = paths [paths.size () - 1];
+      hpp::ros::pathVectorToJointTrajectory (robot, path, data.out_path);
+      data.out_path.header.stamp = ros::Time::now();
+      ++data.out_path.header.seq;
+      data.out_path_active = true;
+      needToExportPath_ = false;
     }
     /* protected region user update end */
   }
@@ -122,6 +140,7 @@ public:
       ROS_DEBUG("%s", exc.what());
       return false;
     }
+    needToExportPath_ = true;
     /* protected region user implementation of service callback for solve end */
     return true;
   }

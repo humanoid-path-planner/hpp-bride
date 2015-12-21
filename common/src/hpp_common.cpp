@@ -12,18 +12,28 @@
 #include <hpp/model/device.hh>
 #include <hpp/core/problem-solver.hh>
 #include <hpp/core/path-vector.hh>
+#include <hpp/corbaserver/server.hh>
+
 #include <hpp/model/urdf/util.hh>
+#include <hpp/manipulation/device.hh>
+#include <hpp/manipulation/problem-solver.hh>
+
+#include <hpp/corbaserver/wholebody-step/server.hh>
+#include <hpp/corbaserver/manipulation/server.hh>
+
 #include <hpp/ros/joint-state.hh>
 #include <hpp/ros/joint-trajectory.hh>
 
-using hpp::model::Device;
-using hpp::model::DevicePtr_t;
 using hpp::model::Configuration_t;
 using hpp::core::ConfigurationPtr_t;
 using hpp::core::PathVectorPtr_t;
 using hpp::core::PathVectors_t;
-using hpp::core::ProblemSolver;
-using hpp::core::ProblemSolverPtr_t;
+using hpp::manipulation::Device;
+using hpp::manipulation::DevicePtr_t;
+using hpp::manipulation::ProblemSolver;
+using hpp::manipulation::ProblemSolverPtr_t;
+
+static const char* argv = "hpp";
 
 /* protected region user include files end */
 
@@ -50,19 +60,39 @@ class hpp_impl
 {
   /* protected region user member variables on begin */
 private:
+  typedef hpp::corbaServer::Server CorbaServer;
+  typedef hpp::wholebodyStep::Server WholebodyServer;
+  typedef hpp::manipulation::Server ManipulationServer;
+  typedef hpp::manipulation::ProblemSolver ProblemSolver;
+  typedef hpp::manipulation::ProblemSolverPtr_t ProblemSolverPtr_t;
+  typedef hpp::manipulation::ManipulationPlanner ManipulationPlanner;
+  typedef hpp::manipulation::ManipulationPlannerPtr_t ManipulationPlannerPtr_t;
+  typedef hpp::manipulation::GraphPathValidation GraphPathValidation;
   ProblemSolverPtr_t problemSolver_;
   ros::Time lastUpdateInitConfig_;
   ros::Time lastUpdateGoalConfig_;
   ConfigurationPtr_t initConfig_;
   ConfigurationPtr_t goalConfig_;
+  CorbaServer corbaServer_;
+  WholebodyServer wbsServer_;
+  ManipulationServer manipServer_;
   bool needToExportPath_;
   /* protected region user member variables end */
 
 public:
-  hpp_impl()
-  {
-    /* protected region user constructor on begin */
-    problemSolver_ = new ProblemSolver;
+  hpp_impl() : problemSolver_ (new ProblemSolver()),
+	       corbaServer_ (problemSolver_, 1, &argv, true),
+	       wbsServer_ (1, &argv, true), manipServer_ (1, &argv, true)
+    {
+        /* protected region user constructor on begin */
+    wbsServer_.setProblemSolver (problemSolver_);
+    manipServer_.setProblemSolver (problemSolver_);
+
+    corbaServer_.startCorbaServer ();
+    wbsServer_.startCorbaServer ("hpp", "corbaserver",
+				 "wholebodyStep", "problem");
+    manipServer_.startCorbaServer ("hpp", "corbaserver",
+				   "manipulation");
     lastUpdateInitConfig_.sec = 0;
     lastUpdateInitConfig_.nsec = 0;
     lastUpdateGoalConfig_.sec = 0;
@@ -95,36 +125,22 @@ public:
     if (needToExportPath_) {
       // Get latest computed path
       const PathVectors_t& paths = problemSolver_->paths ();
-      PathVectorPtr_t path = paths [paths.size () - 1];
-      hpp::ros::pathVectorToJointTrajectory (robot, path, data.out_path);
-      data.out_path.header.stamp = ros::Time::now();
-      ++data.out_path.header.seq;
-      data.out_path_active = true;
+      if (paths.size () > 0) {
+	PathVectorPtr_t path = paths [paths.size () - 1];
+	hpp::ros::pathVectorToJointTrajectory (robot, path, data.out_path);
+	data.out_path.header.stamp = ros::Time::now();
+	++data.out_path.header.seq;
+	data.out_path_active = true;
+      }
       needToExportPath_ = false;
     }
+    corbaServer_.processRequest(false);
     /* protected region user update end */
   }
 
-  bool callback_loadRobotModel(std_srvs::Empty::Request &,
-      std_srvs::Empty::Response &, hpp_config config)
-  {
-    /* protected region user implementation of service callback for loadRobotModel on begin */
-    DevicePtr_t robot = Device::create("robot");
-    try
+    bool callback_loadRobotModel(std_srvs::Empty::Request  &req, std_srvs::Empty::Response &res , hpp_config config)
     {
-      hpp::model::urdf::loadRobotModelFromParameter(robot, "anchor",
-          config.urdfDescription, config.srdfDescription);
-      problemSolver_->robot(robot);
-      // Allocate init and goal configurations
-      initConfig_ = ConfigurationPtr_t (new Configuration_t (robot->configSize ()));
-      initConfig_->setZero ();
-      goalConfig_->setZero ();
-      goalConfig_ = ConfigurationPtr_t (new Configuration_t (robot->configSize ()));
-    } catch (const std::exception& exc)
-    {
-      ROS_DEBUG("%s", exc.what());
-      return false;
-    }
+        /* protected region user implementation of service callback for loadRobotModel on begin */
     /* protected region user implementation of service callback for loadRobotModel end */
     return true;
   }
@@ -149,8 +165,14 @@ public:
   {
     /* protected region user implementation of service callback for loadObstacle on begin */
     /* protected region user implementation of service callback for loadObstacle end */
-    return true;
-  }
+        return true;
+    }
+    bool callback_loadObject(std_srvs::Empty::Request  &req, std_srvs::Empty::Response &res , hpp_config config)
+    {
+        /* protected region user implementation of service callback for loadObject on begin */
+        /* protected region user implementation of service callback for loadObject end */
+        return true;
+    }
 
   /* protected region user additional functions on begin */
   /* protected region user additional functions end */

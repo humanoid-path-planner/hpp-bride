@@ -30,6 +30,7 @@ class hpp_ros
     ros::ServiceServer loadRobotModel_;
     ros::ServiceServer solve_;
     ros::ServiceServer loadObstacle_;
+    ros::ServiceServer loadObject_;
 
     hpp_data component_data_;
     hpp_config component_config_;
@@ -49,6 +50,9 @@ class hpp_ros
         std::string loadObstacle_remap;
         n_.param("loadObstacle_remap", loadObstacle_remap, (std::string)"loadObstacle");
         loadObstacle_ = n_.advertiseService<std_srvs::Empty::Request , std_srvs::Empty::Response>(loadObstacle_remap, boost::bind(&hpp_impl::callback_loadObstacle, &component_implementation_,_1,_2,component_config_));
+        std::string loadObject_remap;
+        n_.param("loadObject_remap", loadObject_remap, (std::string)"loadObject");
+        loadObject_ = n_.advertiseService<std_srvs::Empty::Request , std_srvs::Empty::Response>(loadObject_remap, boost::bind(&hpp_impl::callback_loadObject, &component_implementation_,_1,_2,component_config_));
 
         path_ = n_.advertise<trajectory_msgs::JointTrajectory>("path", 1);
         initConfig_ = n_.subscribe("initConfig", 1, &hpp_ros::topicCallback_initConfig, this);

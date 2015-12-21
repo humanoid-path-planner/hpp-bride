@@ -7,6 +7,7 @@
     <serviceServer name="loadRobotModel" msg="std_srvs::Empty"/>
     <serviceServer name="solve" msg="std_srvs::Empty"/>
     <serviceServer name="loadObstacle" msg="std_srvs::Empty"/>
+    <serviceServer name="loadObject" msg="std_srvs::Empty"/>
     <parameter name="urdfDescription" type="string" value="robot_description"/>
     <parameter name="srdfDescription" type="string" value="robot_srdf"/>
   </node>

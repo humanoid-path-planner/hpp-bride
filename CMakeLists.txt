@@ -21,7 +21,7 @@ set (PROJECT_DESCRIPTION Implementation of a ROS node integrating hpp-core libra
 set (PROJECT_URL https://github.com/humanoid-path-planner/hpp-bride)
 setup_project ()
 add_required_dependency ("hpp_ros")
-add_required_dependency ("hpp-model-urdf >= 3")
+add_required_dependency ("hpp-manipulation-corba >= 1")
 # protected region additional user defined REQUIREMENTS end #
 
 generate_dynamic_reconfigure_options(cfg/hpp.cfg )
@@ -73,8 +73,7 @@ target_link_libraries(hpp
 )
 
 # protected region additional user defined BUILD STATEMENTS on begin #
-pkg_config_use_dependency (hpp hpp-core)
-pkg_config_use_dependency (hpp hpp-model-urdf)
+pkg_config_use_dependency (hpp hpp-manipulation-corba)
 # protected region additional user defined BUILD STATEMENTS end #
 
 

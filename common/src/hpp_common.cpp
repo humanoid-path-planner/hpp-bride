@@ -9,6 +9,7 @@
 
 /* protected region user include files on begin */
 #include <ros/console.h>
+#include <hpp/util/debug.hh>
 #include <hpp/model/device.hh>
 #include <hpp/core/problem-solver.hh>
 #include <hpp/core/path-vector.hh>
@@ -107,9 +108,10 @@ public:
     /* protected region user configure end */
   }
 
-  void update(hpp_data &data, hpp_config)
-  {
-    /* protected region user update on begin */
+    void update(hpp_data &data, hpp_config config)
+    {
+        /* protected region user update on begin */
+    hppDout (info, "update");
     data.out_path_active = false;
     /// Update initial and goal configurations if needed
     DevicePtr_t robot = problemSolver_->robot ();
@@ -136,18 +138,18 @@ public:
     }
     corbaServer_.processRequest(false);
     /* protected region user update end */
-  }
+    }
 
     bool callback_loadRobotModel(std_srvs::Empty::Request  &req, std_srvs::Empty::Response &res , hpp_config config)
     {
         /* protected region user implementation of service callback for loadRobotModel on begin */
     /* protected region user implementation of service callback for loadRobotModel end */
-    return true;
-  }
-  bool callback_solve(std_srvs::Empty::Request &,
-      std_srvs::Empty::Response &, hpp_config)
-  {
-    /* protected region user implementation of service callback for solve on begin */
+        return true;
+    }
+    bool callback_solve(std_srvs::Empty::Request  &req, std_srvs::Empty::Response &res , hpp_config config)
+    {
+        /* protected region user implementation of service callback for solve on begin */
+    hppDout (info, "Solve.");
     try
     {
       problemSolver_->solve();

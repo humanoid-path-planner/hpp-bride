@@ -20,6 +20,13 @@ set (CXX_DISABLE_WERROR True)
 set (PROJECT_DESCRIPTION Implementation of a ROS node integrating hpp-core library)
 set (PROJECT_URL https://github.com/humanoid-path-planner/hpp-bride)
 setup_project ()
+
+# Activate hpp-util logging if requested
+SET (HPP_DEBUG FALSE CACHE BOOL "trigger hpp-util debug output")
+IF (HPP_DEBUG)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHPP_DEBUG")
+ENDIF()
+
 add_required_dependency ("hpp_ros")
 add_required_dependency ("hpp-manipulation-corba >= 1")
 # protected region additional user defined REQUIREMENTS end #

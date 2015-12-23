@@ -20,19 +20,24 @@ Node: hpp
 
 
 #### Published Topics
-**path** *(trajectory_msgs::JointTrajectory)*   
+**path** *(trajectory_msgs::JointTrajectory)*
 <!--- protected region path on begin -->
 <!--- protected region path end -->
 
 
 #### Subscribed Topics
-**initConfig** *(sensor_msgs::JointState)*   
+**initConfig** *(sensor_msgs::JointState)*
 <!--- protected region initConfig on begin -->
 <!--- protected region initConfig end -->
 
-**goalConfig** *(sensor_msgs::JointState)*   
+**goalConfig** *(sensor_msgs::JointState)*
 <!--- protected region goalConfig on begin -->
 <!--- protected region goalConfig end -->
 
+**initObjectPose** *(geometry_msgs::PoseStamped)*
+<!--- protected region initObjectPose on begin -->
+<!--- protected region initObjectPose end -->
 
-
+**goalObjectPose** *(geometry_msgs::PoseStamped)*
+<!--- protected region goalObjectPose on begin -->
+<!--- protected region goalObjectPose end -->

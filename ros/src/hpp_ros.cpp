@@ -7,6 +7,9 @@
 #include <trajectory_msgs/JointTrajectory.h>
 #include <sensor_msgs/JointState.h>
 #include <sensor_msgs/JointState.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <std_srvs/Empty.h>
 #include <std_srvs/Empty.h>
 #include <std_srvs/Empty.h>
 #include <std_srvs/Empty.h>
@@ -27,6 +30,8 @@ class hpp_ros
     ros::Publisher path_;
     ros::Subscriber initConfig_;
     ros::Subscriber goalConfig_;
+    ros::Subscriber initObjectPose_;
+    ros::Subscriber goalObjectPose_;
     ros::ServiceServer loadRobotModel_;
     ros::ServiceServer solve_;
     ros::ServiceServer loadObstacle_;
@@ -57,9 +62,12 @@ class hpp_ros
         path_ = n_.advertise<trajectory_msgs::JointTrajectory>("path", 1);
         initConfig_ = n_.subscribe("initConfig", 1, &hpp_ros::topicCallback_initConfig, this);
         goalConfig_ = n_.subscribe("goalConfig", 1, &hpp_ros::topicCallback_goalConfig, this);
+        initObjectPose_ = n_.subscribe("initObjectPose", 1, &hpp_ros::topicCallback_initObjectPose, this);
+        goalObjectPose_ = n_.subscribe("goalObjectPose", 1, &hpp_ros::topicCallback_goalObjectPose, this);
 
         np_.param("urdfDescription", component_config_.urdfDescription, (std::string)"robot_description");
         np_.param("srdfDescription", component_config_.srdfDescription, (std::string)"robot_srdf");
+
 
 
 
@@ -71,6 +79,14 @@ class hpp_ros
     void topicCallback_goalConfig(const sensor_msgs::JointState::ConstPtr& msg)
     {
         component_data_.in_goalConfig = *msg;
+    }
+    void topicCallback_initObjectPose(const geometry_msgs::PoseStamped::ConstPtr& msg)
+    {
+        component_data_.in_initObjectPose = *msg;
+    }
+    void topicCallback_goalObjectPose(const geometry_msgs::PoseStamped::ConstPtr& msg)
+    {
+        component_data_.in_goalObjectPose = *msg;
     }
 
     void configure_callback(hpp_node::hppConfig &config, uint32_t level)

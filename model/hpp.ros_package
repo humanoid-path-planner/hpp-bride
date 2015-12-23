@@ -4,6 +4,8 @@
     <publisher name="path" msg="trajectory_msgs::JointTrajectory"/>
     <subscriber name="initConfig" msg="sensor_msgs::JointState"/>
     <subscriber name="goalConfig" msg="sensor_msgs::JointState"/>
+    <subscriber name="initObjectPose" msg="geometry_msgs::PoseStamped"/>
+    <subscriber name="goalObjectPose" msg="geometry_msgs::PoseStamped"/>
     <serviceServer name="loadRobotModel" msg="std_srvs::Empty"/>
     <serviceServer name="solve" msg="std_srvs::Empty"/>
     <serviceServer name="loadObstacle" msg="std_srvs::Empty"/>

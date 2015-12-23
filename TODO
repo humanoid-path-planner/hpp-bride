@@ -1,0 +1,14 @@
+This package implements a ROS node linked with hpp-manipulation-corba
+
+The goal is to specify manipulation planning tasks implying one robot and one
+or several objects and to execute the task on the robot.
+
+Following is a list of what remains to do:
+  - provide initial and goal position of objects via subscriber,
+  - merge position of object and configuration of robot into a configuration of
+    composite robot,
+  - transform goal trajectory of composite robot into trajectories of the robot
+  - handle gripper along manipulation paths.
+
+In a longer term,
+  - replace python initialization by ros elements (topics, services, parameters)

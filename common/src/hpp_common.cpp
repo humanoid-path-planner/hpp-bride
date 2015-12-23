@@ -116,6 +116,10 @@ public:
     /// Update initial and goal configurations if needed
     DevicePtr_t robot = problemSolver_->robot ();
     if (robot) {
+      initConfig_ = ConfigurationPtr_t (new Configuration_t
+					(robot->configSize ()));
+      goalConfig_ = ConfigurationPtr_t (new Configuration_t
+					(robot->configSize ()));
       if (data.in_initConfig.header.stamp != lastUpdateInitConfig_) {
         hpp::ros::jointStateToConfig (robot, data.in_initConfig, *initConfig_);
       }
@@ -136,7 +140,7 @@ public:
       }
       needToExportPath_ = false;
     }
-    corbaServer_.processRequest(false);
+    // corbaServer_.processRequest(false);
     /* protected region user update end */
     }
 
@@ -152,6 +156,10 @@ public:
     hppDout (info, "Solve.");
     try
     {
+      // Set initial and goal configurations
+      problemSolver_->initConfig (initConfig_);
+      problemSolver_->resetGoalConfigs ();
+      problemSolver_->addGoalConfig (goalConfig_);
       problemSolver_->solve();
     } catch (const std::exception& exc)
     {
